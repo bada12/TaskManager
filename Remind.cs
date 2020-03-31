@@ -9,12 +9,15 @@ namespace TaskManager
     [Serializable]
     class Remind
     {
+        private bool isDone;
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime DeadLine { get; set; }
+        public bool IsDone { get { return isDone; } }
 
         public Remind(string name = "empty", string description = "empty")
         {
+            this.isDone = false;
             this.Name = name;
             this.Description = name;
             this.DeadLine = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
@@ -91,6 +94,11 @@ namespace TaskManager
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        public void MarkDone()
+        {
+            isDone = true;
         }
 
         public void Editing()
