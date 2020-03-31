@@ -7,6 +7,7 @@ using System.IO;
 
 namespace TaskManager
 {
+    [Serializable]
     class ToDo
     {
         public string Name { get; set; }
