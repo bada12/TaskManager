@@ -17,5 +17,26 @@ namespace TaskManager
             this.Name = name;
             this.Description = name;
         }
+
+        public void Editing()
+        {
+            char key = 'n';
+
+            Console.Write("Do you want to edit name? ");
+            key = Console.ReadLine().ToLower().ToCharArray().First();
+            if(key == 'y')
+            {
+                Console.Write("Enter new name: ");
+                Name = Console.ReadLine();
+            }
+
+            Console.Write("Do you want to edit description? ");
+            key = Console.ReadLine().ToLower().ToCharArray().First();
+            if (key == 'y')
+            {
+                Console.Write("Enter new description: ");
+                Description = Console.ReadLine();
+            }
+        }
     }
 }
