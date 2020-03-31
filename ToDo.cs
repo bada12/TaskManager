@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace TaskManager
 {
     [Serializable]
     class ToDo
     {
+        private bool isDone;
         public string Name { get; set; }
         public string Description { get; set; }
 
         public ToDo(string name = "empty", string description = "empty")
         {
+            this.isDone = false;
             this.Name = name;
             this.Description = name;
         }
@@ -59,6 +60,11 @@ namespace TaskManager
             }
         }
 
+        public void MarkDone()
+        {
+            isDone = true;
+        }
+
         public void Editing()
         {
             EditName();
@@ -68,7 +74,7 @@ namespace TaskManager
         public override string ToString()
         {
             return String.Concat(
-                   "\n-------------------- ToDO ----------------------\n",
+                   "\n------------------ ToDO ----------------------\n",
                    $"Name: {this.Name}\nDescription: {this.Description}\n" +
                    "----------------------------------------------\n"
             );
