@@ -19,25 +19,59 @@ namespace TaskManager
             this.Description = name;
         }
 
-        public void Editing()
+        private void EditName()
         {
-            char key = 'n';
+            char key;
 
             Console.Write("Do you want to edit name? ");
-            key = Console.ReadLine().ToLower().ToCharArray().First();
-            if(key == 'y')
+            try
             {
-                Console.Write("Enter new name: ");
-                Name = Console.ReadLine();
+                key = Console.ReadLine().ToLower().ToCharArray().First();
+                if (key == 'y')
+                {
+                    Console.Write("Enter new name: ");
+                    Name = Console.ReadLine();
+                }
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void EditDescription()
+        {
+            char key;
 
             Console.Write("Do you want to edit description? ");
-            key = Console.ReadLine().ToLower().ToCharArray().First();
-            if (key == 'y')
+            try
             {
-                Console.Write("Enter new description: ");
-                Description = Console.ReadLine();
+                key = Console.ReadLine().ToLower().ToCharArray().First();
+                if (key == 'y')
+                {
+                    Console.Write("Enter new description: ");
+                    Description = Console.ReadLine();
+                }
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void Editing()
+        {
+            EditName();
+            EditDescription();
+        }
+
+        public override string ToString()
+        {
+            return String.Concat(
+                   "\n-------------------- ToDO ----------------------\n",
+                   $"Name: {this.Name}\nDescription: {this.Description}\n" +
+                   "----------------------------------------------\n"
+            );
         }
     }
 }

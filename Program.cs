@@ -11,9 +11,9 @@ namespace TaskManager
         static void Main(string[] args)
         {
             ToDo toDo = new ToDo() { Name = "Created new css-file" };
-            Console.WriteLine(toDo.Name + " " + toDo.Description);
+            Console.WriteLine(toDo);
             toDo.Editing();
-            Console.WriteLine(toDo.Name + " " + toDo.Description);
+            Console.WriteLine(toDo);
 
             Remind remind = new Remind();
             Console.WriteLine(remind);
