@@ -18,14 +18,14 @@ namespace TaskManager
         {
             this.isDone = false;
             this.Name = name;
-            this.Description = name;
+            this.Description = description;
         }
 
         private void EditName()
         {
             char key;
 
-            Console.Write("Do you want to edit name? ");
+            Console.Write("Do you want to edit name?(y/n) ");
             try
             {
                 key = Console.ReadLine().ToLower().ToCharArray().First();
@@ -45,7 +45,7 @@ namespace TaskManager
         {
             char key;
 
-            Console.Write("Do you want to edit description? ");
+            Console.Write("Do you want to edit description?(y/n) ");
             try
             {
                 key = Console.ReadLine().ToLower().ToCharArray().First();
@@ -77,6 +77,7 @@ namespace TaskManager
             return String.Concat(
                    "\n------------------ ToDO ----------------------\n",
                    $"Name: {this.Name}\nDescription: {this.Description}\n" +
+                   $"IsDone: {this.IsDone}\n" + 
                    "----------------------------------------------\n"
             );
         }

@@ -19,7 +19,7 @@ namespace TaskManager
         {
             this.isDone = false;
             this.Name = name;
-            this.Description = name;
+            this.Description = description;
             this.DeadLine = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
                                 DateTime.Now.Day, 23, 59, 59);
         }
@@ -28,7 +28,7 @@ namespace TaskManager
         {
             char key;
 
-            Console.Write("Do you want to edit name? ");
+            Console.Write("Do you want to edit name?(y/n) ");
             try
             {
                 key = Console.ReadLine().ToLower().ToCharArray().First();
@@ -48,7 +48,7 @@ namespace TaskManager
         {
             char key;
 
-            Console.Write("Do you want to edit description? ");
+            Console.Write("Do you want to edit description?(y/n) ");
             try
             {
                 key = Console.ReadLine().ToLower().ToCharArray().First();
@@ -68,7 +68,7 @@ namespace TaskManager
         {
             char key;
 
-            Console.Write("Do you want to edit deadline? ");
+            Console.Write("Do you want to edit deadline?(y/n) ");
             try
             {
                 key = Console.ReadLine().ToLower().ToCharArray().First();
@@ -114,6 +114,7 @@ namespace TaskManager
                    "\n------------------ REMIND --------------------\n",
                    $"Name: {this.Name}\nDescription: {this.Description}\n" +
                    $"Deadline: {this.DeadLine.ToString()}\n" +
+                   $"IsDone: {this.IsDone}\n" +
                    "----------------------------------------------\n"
             );
         }

@@ -21,7 +21,7 @@ namespace TaskManager
             reminds = new List<Remind>();
         }
 
-        static void Load()
+        private static void Load()
         {
             using (FileStream fs = new FileStream(pathToDoTasks, FileMode.OpenOrCreate, FileAccess.Read))
             {
@@ -29,12 +29,29 @@ namespace TaskManager
                 while(fs.Length != fs.Position)
                     toDos.Add((ToDo)formatter.Deserialize(fs));
             }
+
+            using (FileStream fs = new FileStream(pathRemindTasks, FileMode.OpenOrCreate, FileAccess.Read))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                while (fs.Length != fs.Position)
+                    reminds.Add((Remind)formatter.Deserialize(fs));
+            }
         }
 
-        static void Main(string[] args)
+        private static void MakeRemind()
         {
-            Load();
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^ DEADLINE TODAY ^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+            foreach (Remind remind in reminds)
+                if (remind.DeadLine.Date == DateTime.Now.Date)
+                    Console.WriteLine(remind);
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        }
+
+        private static void Main(string[] args)
+        {
             Console.WriteLine("*****\t\t\tTask Manager\t\t\t*****");
+            Load();
+            MakeRemind();
             try
             {
                 while (true)
@@ -58,7 +75,7 @@ namespace TaskManager
             Console.WriteLine("\n************* BYE *************");
         }
 
-        static void PrintMenu()
+        private static void PrintMenu()
         {
             Console.Write("1 - Show ToDo tasks\n");
             Console.Write("2 - Show Remind tasks\n");
@@ -72,10 +89,10 @@ namespace TaskManager
             Console.Write("10 - Mark Remind as done\n");
             Console.Write("11 - Delete Todo task\n");
             Console.Write("12 - Delete Remind task\n");
-            Console.Write("other number`s to exit");
+            Console.Write("other number`s to exit\n");
         }
 
-        static void DoOperation(int key)
+        private static void DoOperation(int key)
         {
             switch (key)
             {
@@ -96,6 +113,7 @@ namespace TaskManager
 
                 //Create Remind task
                 case 4:
+                    CreateRemind();
                     break;
 
                 //Edit ToDo task
@@ -105,6 +123,7 @@ namespace TaskManager
 
                 //Edit Remind task
                 case 6:
+                    EditRemind();
                     break;
 
                 //Save ToDo tasks
@@ -114,6 +133,7 @@ namespace TaskManager
 
                 //Save Remind tasks
                 case 8:
+                    SaveRemind();
                     break;
 
                 //Mark Todo as done
@@ -123,54 +143,45 @@ namespace TaskManager
 
                 //Mark Remind as done
                 case 10:
+                    MarkRemindAsDone();
                     break;
 
                 //Delete Todo task
                 case 11:
+                    DeleteToDo();
                     break;
 
                 //Delete Remind task
                 case 12:
+                    DeleteRemind();
                     break;
             }
         }
 
-        static void ShowToDoTasks()
+        //----------------------------------------- TODO PART ----------------------------------------------------------------
+
+        private static void ShowToDoTasks()
         {
             foreach (ToDo toDo in toDos)
                 Console.WriteLine(toDo);
         }
 
-        static void ShowRemindTasks()
-        {
-            foreach (Remind remind in reminds)
-                Console.WriteLine(remind);
-        }
-
-        static void CreateToDo()
+        private static void CreateToDo()
         {
             Console.Write("Enter name: ");
             string name = Console.ReadLine();
+
             Console.Write("Enter description: ");
             string description = Console.ReadLine();
+
             toDos.Add(new ToDo(name, description));
         }
 
-        static void EditToDo()
+        private static void SaveToDo()
         {
-            Console.WriteLine("******\t\t\t Edit ToDo \t\t\t*******");
-            ShowToDoTasks();
-            Console.Write("Which ToDo task do you want to edit?(enter number): ");
+            if (toDos.Count == 0)
+                File.WriteAllText(pathToDoTasks, string.Empty);
 
-            int index;
-            int.TryParse(Console.ReadLine(), out index);
-
-            if (index >= 0 && index < toDos.Count)
-                toDos[index].Editing();
-        }
-
-        static void SaveToDo()
-        {
             using (FileStream fs = new FileStream(pathToDoTasks, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
@@ -179,9 +190,114 @@ namespace TaskManager
             }
         }
 
-        static void MarkToDoAsDone()
+        private static void EditToDo()
         {
+            Console.WriteLine("******\t\t\t Edit ToDo \t\t\t*******");
+            ShowToDoTasks();
 
+            int index;
+            Console.Write("Which ToDo task do you want to edit?(enter number): ");
+            int.TryParse(Console.ReadLine(), out index);
+
+            if (index >= 0 && index < toDos.Count)
+                toDos[index].Editing();
+        }
+
+        private static void MarkToDoAsDone()
+        {
+            Console.WriteLine("******\t\t\t Mark Todo as done \t\t\t*******");
+            ShowToDoTasks();
+
+            int index;
+            Console.Write("Which ToDo task do you want to mark as done?(enter number from 0): ");
+            int.TryParse(Console.ReadLine(), out index);
+
+            if (index >= 0 && index < toDos.Count)
+                toDos[index].MarkDone();
+        }
+
+        private static void DeleteToDo()
+        {
+            Console.WriteLine("******\t\t\t Delete ToDo \t\t\t*******");
+            ShowToDoTasks();
+
+            int index;
+            Console.Write("Which ToDo task do you want to delete?(enter number from 0): ");
+            int.TryParse(Console.ReadLine(), out index);
+
+            if (index >= 0 && index < toDos.Count)
+                toDos.Remove(toDos[index]);
+        }
+
+        //------------------------------ REMIND PART ----------------------------------------------------------------
+
+        private static void ShowRemindTasks()
+        {
+            foreach (Remind remind in reminds)
+                Console.WriteLine(remind);
+        }
+
+        private static void CreateRemind()
+        {
+            Console.Write("Enter name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter description: ");
+            string description = Console.ReadLine();
+
+            reminds.Add(new Remind(name, description));
+        }
+
+        private static void SaveRemind()
+        {
+            if(reminds.Count == 0)
+                File.WriteAllText(pathRemindTasks, string.Empty);
+
+            using (FileStream fs = new FileStream(pathRemindTasks, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                foreach (Remind remind in reminds)
+                    formatter.Serialize(fs, remind);               
+            }
+        }
+
+        private static void EditRemind()
+        {
+            Console.WriteLine("******\t\t\t Edit Remind \t\t\t*******");
+            ShowRemindTasks();
+
+            int index;
+            Console.Write("Which Remind task do you want to edit?(enter number): ");
+            int.TryParse(Console.ReadLine(), out index);
+
+            if (index >= 0 && index < reminds.Count)
+                reminds[index].Editing();
+        }
+
+        private static void MarkRemindAsDone()
+        {
+            Console.WriteLine("******\t\t\t Mark Remind as done \t\t\t*******");
+            ShowRemindTasks();
+
+            int index;
+            Console.Write("Which Remind task do you want to mark as done?(enter number from 0): ");
+            int.TryParse(Console.ReadLine(), out index);
+
+            if (index >= 0 && index < reminds.Count)
+                reminds[index].MarkDone();
+        }
+
+        private static void DeleteRemind()
+        {
+            Console.WriteLine("******\t\t\t Delete Remind \t\t\t*******");
+            ShowRemindTasks();
+
+            int index;
+            Console.Write("Which Remind task do you want to delete?(enter number from 0): ");
+            int.TryParse(Console.ReadLine(), out index);
+
+            if (index >= 0 && index < reminds.Count)
+                reminds.Remove(reminds[index]);
         }
     }
 }
