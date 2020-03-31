@@ -11,6 +11,8 @@ namespace TaskManager
         static void Main(string[] args)
         {
             Console.WriteLine("fkgeg");
+            ToDo toDo = new ToDo() { Name = "Created new css-file" };
+            Console.WriteLine(toDo.Name + " " + toDo.Description);
         }
     }
 }
