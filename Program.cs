@@ -16,7 +16,9 @@ namespace TaskManager
             Console.WriteLine(toDo.Name + " " + toDo.Description);
 
             Remind remind = new Remind();
-            Console.WriteLine($"{remind.Name}\n{remind.Description}\n{remind.DeadLine}");
+            Console.WriteLine(remind);
+            remind.Editing();
+            Console.WriteLine(remind);
         }
     }
 }
