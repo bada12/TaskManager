@@ -12,6 +12,7 @@ namespace TaskManager
         private bool isDone;
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool IsDone { get { return isDone; } }
 
         public ToDo(string name = "empty", string description = "empty")
         {
